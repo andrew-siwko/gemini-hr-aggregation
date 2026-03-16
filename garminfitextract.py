@@ -4,6 +4,9 @@ import os
 import zipfile
 import pprint
 import datetime
+import pytz
+
+my_tz = pytz.timezone('America/New_York')
 
 garmin_epoch = int(datetime.datetime.timestamp(datetime.datetime(1989, 12, 31, tzinfo=datetime.timezone.utc)))
 
@@ -44,19 +47,19 @@ def parse_fit_hr(file_path):
         if 'timestamp' in field_names:
             # print('got timestamp',message.get_raw_value("timestamp"))
             last_timestamp = message.get_raw_value("timestamp")
-            message_date = datetime.datetime.fromtimestamp(garmin_epoch + last_timestamp, tz=datetime.timezone.utc)
+            message_date = datetime.datetime.fromtimestamp(garmin_epoch + last_timestamp, tz=datetime.timezone.utc).astimezone(my_tz)
             data_point['message_date']=message_date
             # print('last timestamp',last_timestamp)
         elif 'timestamp_16' in field_names:
             timestamp16 = message.get_raw_value("timestamp_16")
             timestamp = last_timestamp
             timestamp += (timestamp16 - (last_timestamp & 0xFFFF)) & 0xFFFF
-            message_date = datetime.datetime.fromtimestamp(garmin_epoch + timestamp, tz=datetime.timezone.utc)
+            message_date = datetime.datetime.fromtimestamp(garmin_epoch + timestamp, tz=datetime.timezone.utc).astimezone(my_tz)
             data_point['message_date']=message_date
             # print('message_date',message_date)
         elif 'stress_level_time' in field_names:
             stress_level_time = message.get_raw_value("stress_level_time")
-            message_date = datetime.datetime.fromtimestamp(garmin_epoch + stress_level_time, tz=datetime.timezone.utc)
+            message_date = datetime.datetime.fromtimestamp(garmin_epoch + stress_level_time, tz=datetime.timezone.utc).astimezone(my_tz)
             data_point['message_date']=message_date
             # print('message_date',message_date)
         interesting_message=False
