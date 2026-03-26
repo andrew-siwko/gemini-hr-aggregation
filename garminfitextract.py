@@ -43,7 +43,6 @@ def parse_fit_hr(file_path):
             message_fields_seen.append(str(field_names))
             print('******* new message fields',field_names)
 
-        heart_rate=None
         if 'timestamp' in field_names:
             # print('got timestamp',message.get_raw_value("timestamp"))
             last_timestamp = message.get_raw_value("timestamp")
@@ -80,24 +79,3 @@ for fit_file in fit_files:
         all_hr_data.append(parse_fit_hr(fit_file))
 
 pandas.concat(all_hr_data).to_csv('/data/fit/hr_data.csv',index=False)
-
-
-#['timestamp', 'distance', 'steps', 'active_time', 'active_calories', 'duration_min', 'activity_type']
-#['cycles', 'active_time', 'active_calories', 'timestamp_16', 'activity_type', 'intensity', 'current_activity_type_intensity']
-#['stress_level_time', 'stress_level_value', 'unknown_2', 'unknown_3', 'unknown_4']
-
-
-# ******* new message fields ['serial_number', 'time_created', 'manufacturer', 'garmin_product', 'number', 'unknown_6', 'type']
-# ******* new message fields ['timestamp', 'serial_number', 'manufacturer', 'garmin_product', 'software_version']
-# ******* new message fields ['version']
-# ******* new message fields ['unknown_0', 'unknown_1', 'unknown_2']
-# ******* new message fields ['timestamp', 'local_timestamp', 'cycles_to_distance', 'cycles_to_calories', 'unknown_7', 'resting_metabolic_rate', 'activity_type', 'unknown_8']
-# ******* new message fields ['unknown_2']
-# ******* new message fields ['timestamp', 'unknown_37', 'unknown_38']
-# ******* new message fields ['unknown_253', 'enabled']
-# ******* new message fields ['timestamp', 'data', 'data16', 'event', 'event_type']
-# ******* new message fields ['timestamp', 'activity_type', 'intensity', 'current_activity_type_intensity']
-# ******* new message fields ['stress_level_time', 'stress_level_value', 'unknown_2', 'unknown_3', 'unknown_4']
-# ******* new message fields ['unknown_253', 'unknown_0']
-# ******* new message fields ['timestamp_16', 'heart_rate']
-
