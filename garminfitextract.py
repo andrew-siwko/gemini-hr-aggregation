@@ -26,7 +26,7 @@ my_tz = pytz.timezone('America/New_York')
 garmin_epoch = int(datetime.datetime.timestamp(datetime.datetime(1989, 12, 31, tzinfo=datetime.timezone.utc)))
 
 # get a list of the zip files in /data/fit.
-zip_files=['/data/fit/'+x for x in os.listdir('/data/fit') if x.endswith('.zip')]
+zip_files=sorted(['/data/fit/'+x for x in os.listdir('/data/fit') if x.endswith('.zip')])
 
 # extract all the fit files from the zip files into the /data/fit directory.
 for zip_file in zip_files:
@@ -36,7 +36,7 @@ for zip_file in zip_files:
 
 
 # now list the fit files.
-fit_files=['/data/fit/'+x for x in os.listdir('/data/fit') if x.endswith('.fit')]
+fit_files=sorted(['/data/fit/'+x for x in os.listdir('/data/fit') if x.endswith('.fit')])
 
 # During development I tracked message formats that I hadn't seen before looking for interesting information.
 message_fields_seen=[]
