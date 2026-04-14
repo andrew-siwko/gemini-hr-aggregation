@@ -68,6 +68,8 @@ def parse_fit_hr(file_path):
         if str(field_names) not in message_fields_seen:
             message_fields_seen.append(str(field_names))
             print('******* new message fields',field_names)
+            field_values=[x.value for x in message.fields]
+            print('******* new message values',field_values)
 
         # if three's a timesttamp, save it and compute the message_date.
         if 'timestamp' in field_names:
