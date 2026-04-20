@@ -17,7 +17,13 @@ import os
 import zipfile
 
 import datetime
+import time
 import pytz
+
+start_time=time.time()
+
+def etime(start_time):
+    return(str(datetime.timedelta(seconds=time.time()-start_time)))
 
 # I'm in Eastern time.  Before I made the time zone conversion, Gemini was unable to correlate my activities with the local time.
 my_tz = pytz.timezone('America/New_York')
@@ -25,18 +31,22 @@ my_tz = pytz.timezone('America/New_York')
 # Garmin timestamps are a bit complicates.  I got the garmin epoch algoritm from Stack Overflow: https://stackoverflow.com/questions/57774180/how-to-handle-timestamp-16-in-garmin-devices
 garmin_epoch = int(datetime.datetime.timestamp(datetime.datetime(1989, 12, 31, tzinfo=datetime.timezone.utc)))
 
-# get a list of the zip files in /data/fit.
-zip_files=sorted(['/data/fit/'+x for x in os.listdir('/data/fit') if x.endswith('.zip')])
+# getting ready to refactor this for multiple users
+base_directory='/data/fit'
+
+print(etime(start_time),'starting')
+      # get a list of the zip files in /data/fit.
+zip_files=sorted([base_directory+'/'+x for x in os.listdir(base_directory) if x.endswith('.zip')])
 
 # extract all the fit files from the zip files into the /data/fit directory.
 for zip_file in zip_files:
-    print('extracting',zip_file)
+    print(etime(start_time),'extracting',zip_file)
     with zipfile.ZipFile(zip_file, 'r') as zip_ref:
-        zip_ref.extractall('/data/fit')
+        zip_ref.extractall(base_directory)
 
 
 # now list the fit files.
-fit_files=sorted(['/data/fit/'+x for x in os.listdir('/data/fit') if x.endswith('.fit')])
+fit_files=sorted([base_directory+'/'+x for x in os.listdir('/data/fit') if x.endswith('.fit')])
 
 # During development I tracked message formats that I hadn't seen before looking for interesting information.
 message_fields_seen=[]
@@ -67,9 +77,9 @@ def parse_fit_hr(file_path):
         # if we havn't seen this combination of fields before, print it out to see whether it has any interesting data.
         if str(field_names) not in message_fields_seen:
             message_fields_seen.append(str(field_names))
-            print('******* new message fields',field_names)
+            print(etime(start_time),'******* new message fields',field_names)
             field_values=[x.value for x in message.fields]
-            print('******* new message values',field_values)
+            print(etime(start_time),'******* new message values',field_values)
 
         # if three's a timesttamp, save it and compute the message_date.
         if 'timestamp' in field_names:
@@ -121,3 +131,4 @@ for fit_file in fit_files:
 # take the list of DataFrames from every file and concatenate them into one big DataFrame and save it to a CSV file.
 pandas.concat(all_hr_data).to_csv('/data/fit/hr_data.csv',index=False)
 
+print(etime(start_time),'finished')
