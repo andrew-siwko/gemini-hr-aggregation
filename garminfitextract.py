@@ -35,12 +35,13 @@ garmin_epoch = int(datetime.datetime.timestamp(datetime.datetime(1989, 12, 31, t
 base_directory='/data/fit'
 
 print(etime(start_time),'starting')
-      # get a list of the zip files in /data/fit.
+
+# get a list of the zip files in /data/fit.
 zip_files=sorted([base_directory+'/'+x for x in os.listdir(base_directory) if x.endswith('.zip')])
 
 # extract all the fit files from the zip files into the /data/fit directory.
 for zip_file in zip_files:
-    print(etime(start_time),'extracting',zip_file)
+    # print(etime(start_time),'extracting',zip_file)
     with zipfile.ZipFile(zip_file, 'r') as zip_ref:
         zip_ref.extractall(base_directory)
 
