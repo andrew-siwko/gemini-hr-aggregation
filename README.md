@@ -13,11 +13,6 @@ Out of curiosity, I rewrote the export code to use fitdecode.  My primary concer
 | :--- |
 <br/>
 
-<kbd>
-  ![Gemini Spreadsheet Comparison](gemini-compare-output.png) |
-</kbd>
-
-
 For one run from December through April, fitparse finished in 1:50 while fitdecode finished in 1:40.  There was a slight performance improvement.  Keep in mind that I haven't doen any optimizations to either version.  In the future I may cache the parsing results in pickled form by file and simply concatenate.  I expect the speed to improve but 2 minutes for several months of data does not annoy me.
 I ran the full enhanced file through Gemini and found that Gemini silently fails.  It appears that there's a file size limit.  A 20M csv worked but with a 53M file with 696,564 rows, Gemini just deleted the prompt and returned.  Given that many of the data elements are spurious, I'll probalby start reducing the interesting columns in that program.
 As part of this effort, I've renamed the original script with -parse and the new one as -decode.
