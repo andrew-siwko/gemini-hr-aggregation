@@ -9,6 +9,7 @@ The chart below is based on 4 months of garmin data with the infection right in 
 One of the things that has frustrated me about fitparse is all the unknown data.  There's information in the files but fitparse does not know what it represents.  In fairness to David, the author, ([fitparse on github])(https://github.com/dtcooper/python-fitparse), he does say that he doesn't have time to update the code and he does provide instructions on how to update the SDK version.  I have not done that.  David mentioned the [fitdecode module](https://github.com/polyvertex/fitdecode) as an alternative that is more up to date.  It's also a stream parser and theoretially faster.
 Out of curiosity, I rewrote the export code to use fitdecode.  My primary concern after the first version worked was whether the output was the same for both parsers.  I oploaded the two files to Gemini and asked for a comparison.  Thankfully, I got the response that the second file is a superset of the first.
 
+<br/>
 | ![Gemini Spreadsheet Comparison](gemini-compare-output.png) |
 | :--- |
 <br/>
@@ -16,3 +17,8 @@ Out of curiosity, I rewrote the export code to use fitdecode.  My primary concer
 For one run from December through April, fitparse finished in 1:50 while fitdecode finished in 1:40.  There was a slight performance improvement.  Keep in mind that I haven't doen any optimizations to either version.  In the future I may cache the parsing results in pickled form by file and simply concatenate.  I expect the speed to improve but 2 minutes for several months of data does not annoy me.
 I ran the full enhanced file through Gemini and found that Gemini silently fails.  It appears that there's a file size limit.  A 20M csv worked but with a 53M file with 696,564 rows, Gemini just deleted the prompt and returned.  Given that many of the data elements are spurious, I'll probalby start reducing the interesting columns in that program.
 As part of this effort, I've renamed the original script with -parse and the new one as -decode.
+<br/>
+While investigating the SDK refresh mentioned on the fitparse page, I came across the Garmin SDK and wrote some code to test.  The current code does read all my files.  There are still unknown messages.  The -sdk script is checked in but not functional yet.
+<br/>
+<br/>
+Why do I get unknown messages out of FIT files? [Garmin Developer Forum](https://forums.garmin.com/developer/fit-sdk/f/discussion/301794/where-to-get-a-complete-list-of-fit-profile-and-message-definitions?pifragment-1304=4)
