@@ -9,7 +9,7 @@ The chart below is based on 4 months of garmin data with the infection right in 
 One of the things that has frustrated me about fitparse is all the unknown data.  There's information in the files but fitparse does not know what it represents.  In fairness to David, the author, ([fitparse on github])(https://github.com/dtcooper/python-fitparse), he does say that he doesn't have time to update the code and he does provide instructions on how to update the SDK version.  I have not done that.  David mentioned the [fitdecode module](https://github.com/polyvertex/fitdecode) as an alternative that is more up to date.  It's also a stream parser and theoretially faster.
 Out of curiosity, I rewrote the export code to use fitdecode.  My primary concern after the first version worked was whether the output was the same for both parsers.  I oploaded the two files to Gemini and asked for a comparison.  Thankfully, I got the response that the second file is a superset of the first.
 <kbd>
-![Gemini Spreadsheet Comparison](gemini-compare-output.png)
+  ![Gemini Spreadsheet Comparison](gemini-compare-output.png)
 </kbd>
 <br/>
 For one run from December through April, fitparse finished in 1:50 while fitdecode finished in 1:40.  There was a slight performance improvement.  Keep in mind that I haven't doen any optimizations to either version.  In the future I may cache the parsing results in pickled form by file and simply concatenate.  I expect the speed to improve but 2 minutes for several months of data does not annoy me.
