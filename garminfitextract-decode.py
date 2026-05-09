@@ -6,8 +6,10 @@ import os
 import zipfile
 import pprint
 import datetime
+import sys
 import time
 import pytz 
+import pathlib
 
 start_time=time.time()
 
@@ -18,7 +20,27 @@ my_tz = pytz.timezone('America/New_York')
 
 print(etime(start_time),'starting')
 
-zip_files=['/data/fit/'+x for x in os.listdir('/data/fit') if x.endswith('.zip')]
+
+file_count_limit=None
+print(etime(start_time),sys.argv)
+if len(sys.argv)>1:
+    args=[x.lower() for x in sys.argv[1:]]
+    if '-limit' in args:
+        file_count_limit=int(args[args.index('-limit')+1])
+        print(etime(start_time),'file count limit set to',file_count_limit)
+        directory = pathlib.Path("/data/fit")
+
+        for file_path in directory.glob("*.fit"):
+            file_path.unlink()  # This deletes the file
+            # print(f"Removed: {file_path}")
+
+zip_files=sorted(['/data/fit/'+x for x in os.listdir('/data/fit') if x.endswith('.zip')])
+
+if file_count_limit is not None:
+    zip_files.reverse()
+    zip_files = zip_files[:file_count_limit]
+    zip_files.reverse()
+print(zip_files)
 
 for zip_file in zip_files:
     # print(etime(start_time),'extracting',zip_file)
@@ -99,6 +121,11 @@ for fit_file in fit_files:
     if 'activity' not in fit_file.lower():
         all_hr_data.append(parse_fit_hr(fit_file))
 
+if file_count_limit is not None:
+    output_file_name = '/data/fit/hr_data-decode-'+str(file_count_limit)+'.csv'
+else:
+    output_file_name = '/data/fit/hr_data-decode.csv'
+    
 df=pandas.concat(all_hr_data)
-df.to_csv('/data/fit/hr_data-2.csv',index=False)
+df.to_csv(output_file_name,index=False)
 
